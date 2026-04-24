@@ -1028,21 +1028,6 @@ export function DetailsDialog(props: DetailsDialogProps) {
           />
         )}
 
-        {/* System prompt override */}
-        {other?.is_system_prompt_overwritten && (
-          <DetailRow
-            label={t('System Prompt')}
-            value={
-              <StatusBadge
-                label={t('Overwritten')}
-                variant='orange'
-                size='sm'
-                copyable={false}
-              />
-            }
-          />
-        )}
-
         {/* Token breakdown (for consume/error types with token data) */}
         {isDisplayableType(props.log.type) && other && (
           <TokenBreakdown log={props.log} other={other} />
