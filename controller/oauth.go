@@ -354,7 +354,7 @@ func findOrCreateOAuthUser(c *gin.Context, provider oauth.Provider, oauthUser *o
 	} else {
 		user.DisplayName = provider.GetName() + " User"
 	}
-	if oauthUser.Email != "" {
+	if oauthUser.Email != "" && common.IsQQEmailAllowed(oauthUser.Email) {
 		user.Email = model.NormalizeEmail(oauthUser.Email)
 		if err := model.EnsureEmailAvailable(user.Email, 0); err != nil {
 			if errors.Is(err, model.ErrEmailAlreadyTaken) {
