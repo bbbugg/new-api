@@ -19,8 +19,7 @@ const TARGET_SELECTORS = {
   mobile_console_menu_button: '[data-sidebar="trigger"]',
   sidebar_token_management: 'a[href="/keys"]',
   sidebar_usage_logs: 'a[href="/usage-logs"]',
-  sidebar_wallet_management: 'a[href="/wallet"]',
-  sidebar_overview: '[data-sidebar="content"]',
+  sidebar_invite_rewards: 'a[href="/wallet"]',
   tokens_mobile_actions_toggle: 'a[href="/keys"]',
   add_token_basics: '[data-slot="sheet-content"] form',
 };
@@ -33,8 +32,7 @@ export function OnboardingTargets() {
       {
         id: 'header_home_nav',
         title: '首页设置教程',
-        description:
-          '如果不知道该如何配置 API，请从首页进入设置教程查看说明。',
+        description: '使用教程、售后群号、充值额度方式等都在首页，必看哦！',
         placement: 'bottom',
         priority: 1000,
         maxWidth: 380,
@@ -42,7 +40,7 @@ export function OnboardingTargets() {
       {
         id: 'header_model_market',
         title: '模型广场',
-        description: '这里可以查看可用模型及对应价格。',
+        description: '这里可以查到所有模型与具体价格，本站点1r=站内1额度。',
         placement: 'bottom',
         priority: 300,
         maxWidth: 360,
@@ -57,30 +55,25 @@ export function OnboardingTargets() {
       {
         id: 'sidebar_token_management',
         title: '令牌管理',
-        description: '添加令牌后即可获取调用模型所需的密钥。',
+        description: '添加令牌获取密码钥匙，来调用模型。',
         placement: 'right',
         maxWidth: 340,
       },
       {
         id: 'sidebar_usage_logs',
         title: '使用日志',
-        description: '这里可以查看 API 调用记录和失败原因。',
+        description:
+          '可以查看到你调用 API 相关记录，报错不扣费。生成失败会有具体报错记录。',
         placement: 'right',
         maxWidth: 360,
       },
       {
-        id: 'sidebar_wallet_management',
-        title: '钱包管理',
-        description: '这里可以充值额度并查看邀请奖励。',
+        id: 'sidebar_invite_rewards',
+        title: '邀请奖励',
+        description:
+          '该页面有专属邀请链接。邀请用户可获得额度奖励，请勿注册多个小号刷奖励。',
         placement: 'right',
         maxWidth: 380,
-      },
-      {
-        id: 'sidebar_overview',
-        title: '其他页面',
-        description: '侧边栏中的其他页面可以管理账户和系统数据。',
-        placement: 'right',
-        maxWidth: 320,
       },
       {
         id: 'tokens_mobile_actions_toggle',
@@ -92,7 +85,8 @@ export function OnboardingTargets() {
       {
         id: 'add_token_basics',
         title: '如何创建令牌',
-        description: '填写令牌名称、选择分组，并按需设置过期时间与额度。',
+        description:
+          '令牌名称随意填写，勾选无限额度。分组按需求选择，但一定要选择。',
         placement: 'right',
         maxWidth: 360,
       },

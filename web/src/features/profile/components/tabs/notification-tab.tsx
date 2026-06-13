@@ -17,7 +17,7 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import { Bell, Loader2, Mail, Server, Webhook } from 'lucide-react'
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
@@ -27,10 +27,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import {
-  useOnboardingScope,
-  useOnboardingTarget,
-} from '@/hooks/useOnboarding'
 import { ROLE } from '@/lib/roles'
 
 import { updateUserSettings } from '../../api'
@@ -72,22 +68,6 @@ export function NotificationTab({ profile, onUpdate }: NotificationTabProps) {
   const { t } = useTranslation()
   const isAdmin = (profile?.role ?? 0) >= ROLE.ADMIN
   const [loading, setLoading] = useState(false)
-  const recordIpLogTargetProps = useOnboardingTarget('record_ip_log_privacy')
-  const recordIpLogGuides = useMemo(
-    () => [
-      {
-        id: 'record_ip_log_privacy',
-        title: 'IP记录说明',
-        description:
-          '默认开启 IP 记录，仅用于在使用日志中核对调用来源。发现异常调用时，请删除旧令牌、重新创建令牌并修改账号密码。',
-        placement: 'top',
-        maxWidth: 420,
-        priority: 1,
-      },
-    ],
-    []
-  )
-  useOnboardingScope(recordIpLogGuides)
   const [settings, setSettings] = useState<UserSettings>({
     notify_type: 'email',
     quota_warning_threshold: DEFAULT_QUOTA_WARNING_THRESHOLD,
@@ -397,10 +377,7 @@ export function NotificationTab({ profile, onUpdate }: NotificationTabProps) {
         </div>
 
         {/* Record IP Log */}
-        <div
-          {...recordIpLogTargetProps}
-          className='flex items-start justify-between gap-3 rounded-lg border p-3 sm:items-center sm:p-4'
-        >
+        <div className='flex items-start justify-between gap-3 rounded-lg border p-3 sm:items-center sm:p-4'>
           <div className='space-y-0.5'>
             <Label htmlFor='recordIp'>{t('Record IP Address')}</Label>
             <p className='text-muted-foreground text-xs sm:text-sm'>

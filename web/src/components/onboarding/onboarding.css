@@ -100,17 +100,30 @@
   flex-wrap: wrap;
 }
 
-.onboarding-confirm-button {
-  background: #b1d8f3 !important;
-  border-color: #b1d8f3 !important;
+.onboarding-dismiss-button {
+  background: #ffffff !important;
+  border: 1px solid #171717 !important;
   color: #171717 !important;
+}
+
+.onboarding-dismiss-button:hover,
+.onboarding-dismiss-button:focus {
+  background: #f5f5f5 !important;
+  border-color: #171717 !important;
+  color: #171717 !important;
+}
+
+.onboarding-confirm-button {
+  background: #171717 !important;
+  border-color: #171717 !important;
+  color: #ffffff !important;
 }
 
 .onboarding-confirm-button:hover,
 .onboarding-confirm-button:focus {
-  background: #b1d8f3 !important;
-  border-color: #b1d8f3 !important;
-  color: #171717 !important;
+  background: #000000 !important;
+  border-color: #000000 !important;
+  color: #ffffff !important;
 }
 
 html.dark .onboarding-mask-svg {
@@ -145,6 +158,32 @@ html.dark .onboarding-card-badge {
 
 html.dark .onboarding-card-description {
   color: rgba(255, 255, 255, 0.78);
+}
+
+html.dark .onboarding-dismiss-button {
+  background: rgba(17, 24, 39, 0.96) !important;
+  border-color: rgba(255, 255, 255, 0.86) !important;
+  color: #ffffff !important;
+}
+
+html.dark .onboarding-dismiss-button:hover,
+html.dark .onboarding-dismiss-button:focus {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: #ffffff !important;
+  color: #ffffff !important;
+}
+
+html.dark .onboarding-confirm-button {
+  background: #ffffff !important;
+  border-color: #ffffff !important;
+  color: #171717 !important;
+}
+
+html.dark .onboarding-confirm-button:hover,
+html.dark .onboarding-confirm-button:focus {
+  background: #f5f5f5 !important;
+  border-color: #f5f5f5 !important;
+  color: #171717 !important;
 }
 
 @media (max-width: 767px) {

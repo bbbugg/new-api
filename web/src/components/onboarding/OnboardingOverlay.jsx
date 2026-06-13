@@ -722,14 +722,18 @@ const OnboardingOverlay = ({ guide, target, onConfirm, onDismissAll }) => {
         )}
 
         <div className='onboarding-card-actions'>
-          <Button variant='ghost' onClick={onDismissAll}>
-            {t('onboarding.dismissAll')}
+          <Button
+            variant='ghost'
+            className='onboarding-dismiss-button'
+            onClick={onDismissAll}
+          >
+            {t('onboarding.dismissAll', { defaultValue: '不再提醒' })}
           </Button>
           <Button
             className='onboarding-confirm-button'
             onClick={onConfirm}
           >
-            {t('onboarding.confirm')}
+            {t('onboarding.confirm', { defaultValue: '好的' })}
           </Button>
         </div>
       </div>
