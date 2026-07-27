@@ -47,6 +47,8 @@ import {
   useDataTable,
 } from '@/components/data-table'
 import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
 import { combineBillingExpr } from '@/features/pricing/lib/billing-expr'
 import { useMediaQuery } from '@/hooks'
 
@@ -89,6 +91,8 @@ type ModelRatioVisualEditorProps = {
   billingExpr: string
   candidateModelNames?: string[]
   candidateModelsLoading?: boolean
+  allowedModelNames?: string[]
+  allowedModelsLoading?: boolean
   filterMode?: 'all' | 'unset'
   onChange: (field: string, value: string) => void
   onSave: () => void | Promise<void>
@@ -128,6 +132,8 @@ const ModelRatioVisualEditorComponent = forwardRef<
     billingExpr,
     candidateModelNames,
     candidateModelsLoading,
+    allowedModelNames,
+    allowedModelsLoading,
     filterMode = 'all',
     onChange,
     onSave,
@@ -144,6 +150,7 @@ const ModelRatioVisualEditorComponent = forwardRef<
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [globalFilter, setGlobalFilter] = useState('')
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
+  const [addedModelsOnly, setAddedModelsOnly] = useState(false)
   const editorPanelRef = useRef<ModelPricingEditorPanelHandle>(null)
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -221,6 +228,11 @@ const ModelRatioVisualEditorComponent = forwardRef<
         ? new Set(candidateModelNames ?? [])
         : new Set([...savedByName.keys(), ...draftByName.keys()])
 
+    const allowedModelNameSet =
+      Array.isArray(allowedModelNames) && allowedModelNames.length > 0
+        ? new Set(allowedModelNames)
+        : null
+
     return [...modelNames]
       .map((name) => {
         const saved = savedByName.get(name)
@@ -241,9 +253,17 @@ const ModelRatioVisualEditorComponent = forwardRef<
       })
       .filter((row) => !row.isDraftDeleted)
       .filter((row) => filterMode !== 'unset' || isBasePricingUnset(row.saved))
+      .filter(
+        (row) =>
+          !addedModelsOnly ||
+          !allowedModelNameSet ||
+          allowedModelNameSet.has(row.name)
+      )
       .sort((a, b) => a.name.localeCompare(b.name))
   }, [
     candidateModelNames,
+    allowedModelNames,
+    addedModelsOnly,
     filterMode,
     savedModelPrice,
     savedModelRatio,
@@ -707,10 +727,23 @@ const ModelRatioVisualEditorComponent = forwardRef<
             ]}
             preActions={
               filterMode === 'unset' ? undefined : (
-                <Button onClick={handleAdd}>
-                  <Plus data-icon='inline-start' />
-                  {t('Add model')}
-                </Button>
+                <div className='flex items-center gap-3'>
+                  <Button onClick={handleAdd}>
+                    <Plus data-icon='inline-start' />
+                    {t('Add model')}
+                  </Button>
+                  <div className='flex items-center gap-2'>
+                    <Switch
+                      id='added-models-only'
+                      checked={addedModelsOnly}
+                      disabled={allowedModelsLoading}
+                      onCheckedChange={setAddedModelsOnly}
+                    />
+                    <Label htmlFor='added-models-only'>
+                      {t('Show only added models')}
+                    </Label>
+                  </div>
+                </div>
               )
             }
           />
@@ -853,6 +886,8 @@ export const ModelRatioVisualEditor = memo(
       prevProps.billingExpr === nextProps.billingExpr &&
       prevProps.candidateModelNames === nextProps.candidateModelNames &&
       prevProps.candidateModelsLoading === nextProps.candidateModelsLoading &&
+      prevProps.allowedModelNames === nextProps.allowedModelNames &&
+      prevProps.allowedModelsLoading === nextProps.allowedModelsLoading &&
       prevProps.filterMode === nextProps.filterMode &&
       prevProps.onChange === nextProps.onChange &&
       prevProps.onSave === nextProps.onSave &&

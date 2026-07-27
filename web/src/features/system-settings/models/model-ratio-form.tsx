@@ -181,14 +181,12 @@ export const ModelRatioForm = memo(function ModelRatioForm({
   const enabledModelsQuery = useQuery({
     queryKey: ['enabled-models'],
     queryFn: getEnabledModels,
-    enabled: isUnsetVariant,
   })
 
-  const enabledModelsError = isUnsetVariant
-    ? enabledModelsQuery.isError ||
-      (enabledModelsQuery.data !== undefined &&
-        !enabledModelsQuery.data.success)
-    : false
+  const enabledModelsError =
+    enabledModelsQuery.isError ||
+    (enabledModelsQuery.data !== undefined &&
+      !enabledModelsQuery.data.success)
   const enabledModelsErrorMessage = enabledModelsQuery.data?.message
 
   useEffect(() => {
@@ -288,6 +286,10 @@ export const ModelRatioForm = memo(function ModelRatioForm({
               candidateModelNames={
                 isUnsetVariant ? enabledModelsQuery.data?.data : undefined
               }
+              allowedModelNames={
+                isUnsetVariant ? undefined : enabledModelsQuery.data?.data
+              }
+              allowedModelsLoading={enabledModelsQuery.isLoading}
               candidateModelsLoading={
                 isUnsetVariant && enabledModelsQuery.isLoading
               }
