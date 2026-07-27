@@ -219,17 +219,9 @@ export function formatModelName(log: UsageLog): {
   isMapped: boolean
   actualModel?: string
 } {
-  const other = parseLogOther(log.other)
-  const isMapped = !!(
-    other?.is_model_mapped &&
-    other?.upstream_model_name &&
-    other.upstream_model_name !== ''
-  )
-
   return {
     name: log.model_name,
-    isMapped,
-    actualModel: isMapped ? other.upstream_model_name : undefined,
+    isMapped: false,
   }
 }
 
