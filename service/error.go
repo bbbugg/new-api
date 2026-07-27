@@ -92,6 +92,24 @@ func RelayErrorHandler(ctx context.Context, resp *http.Response, showBodyWhenFai
 		return
 	}
 	CloseResponseBodyGracefully(resp)
+	const maxUpstreamBodyForMatch = 8 * 1024
+	bodyForMatch := responseBody
+	if len(bodyForMatch) > maxUpstreamBodyForMatch {
+		bodyForMatch = bodyForMatch[:maxUpstreamBodyForMatch]
+	}
+	setUpstreamBody := func(e *types.NewAPIError) {
+		if e == nil {
+			return
+		}
+		e.UpstreamBody = string(bodyForMatch)
+	}
+	setUpstreamParseErr := func(e *types.NewAPIError, parseErr error) {
+		if e == nil || parseErr == nil {
+			return
+		}
+		e.UpstreamParseError = parseErr.Error()
+	}
+	setUpstreamBody(newApiErr)
 	var errResponse dto.GeneralErrorResponse
 	responseBodyText := string(responseBody)
 	responseBodyPreview := common.LocalLogPreview(responseBodyText)
@@ -104,6 +122,7 @@ func RelayErrorHandler(ctx context.Context, resp *http.Response, showBodyWhenFai
 
 	err = common.Unmarshal(responseBody, &errResponse)
 	if err != nil {
+		setUpstreamParseErr(newApiErr, err)
 		if showBodyWhenFail {
 			newApiErr.Err = buildErrWithBody("")
 		} else {
@@ -118,6 +137,7 @@ func RelayErrorHandler(ctx context.Context, resp *http.Response, showBodyWhenFai
 		oaiError := errResponse.TryToOpenAIError()
 		if oaiError != nil {
 			newApiErr = types.WithOpenAIError(*oaiError, resp.StatusCode)
+			setUpstreamBody(newApiErr)
 			if showBodyWhenFail {
 				newApiErr.Err = buildErrWithBody(newApiErr.Error())
 			}
@@ -131,6 +151,7 @@ func RelayErrorHandler(ctx context.Context, resp *http.Response, showBodyWhenFai
 		logger.LogError(ctx, fmt.Sprintf("bad response status code %d with empty error message, body: %s", resp.StatusCode, responseBodyPreview))
 	}
 	newApiErr = types.NewOpenAIError(errors.New(message), types.ErrorCodeBadResponseStatusCode, resp.StatusCode)
+	setUpstreamBody(newApiErr)
 	if showBodyWhenFail {
 		newApiErr.Err = buildErrWithBody(newApiErr.Error())
 	}

@@ -204,6 +204,15 @@ func SetApiRouter(router *gin.Engine) {
 			optionRoute.GET("/waffo-pancake/subscription-product-options", controller.ListWaffoPancakeSubscriptionProductOptions)
 		}
 
+		errorReplaceRuleRoute := apiRouter.Group("/error-replace-rule")
+		errorReplaceRuleRoute.Use(middleware.RootAuth())
+		{
+			errorReplaceRuleRoute.GET("/", controller.ListErrorReplaceRules)
+			errorReplaceRuleRoute.POST("/", controller.CreateErrorReplaceRule)
+			errorReplaceRuleRoute.PUT("/:id", controller.UpdateErrorReplaceRule)
+			errorReplaceRuleRoute.DELETE("/:id", controller.DeleteErrorReplaceRule)
+		}
+
 		// Custom OAuth provider management (root only)
 		customOAuthRoute := apiRouter.Group("/custom-oauth-provider")
 		customOAuthRoute.Use(middleware.RootAuth())

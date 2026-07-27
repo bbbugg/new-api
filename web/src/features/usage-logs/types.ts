@@ -141,6 +141,10 @@ export interface LogOtherData {
       original: number
       clamped: number
     }
+    original_error?: string
+    public_error?: string
+    error_replace_rule_id?: number
+    error_replace_rule_name?: string
   }
   // Language-independent operation descriptor (audit/login logs).
   // Frontend renders localized content from action + params via i18n templates.

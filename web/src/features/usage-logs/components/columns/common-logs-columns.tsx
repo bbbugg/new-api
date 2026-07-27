@@ -727,11 +727,18 @@ export function useCommonLogsColumns(isAdmin: boolean): ColumnDef<UsageLog>[] {
       accessorKey: 'content',
       header: t('Details'),
       cell: function DetailsCell({ row }) {
-        const [dialogOpen, setDialogOpen] = useState(false)
-        const log = row.original
-        const other = parseLogOther(log.other)
+          const [dialogOpen, setDialogOpen] = useState(false)
+          const log = row.original
+          const other = parseLogOther(log.other)
+          const originalError =
+            isAdmin && log.type === 5
+              ? other?.admin_info?.original_error
+              : undefined
+          const displayLog = originalError
+            ? { ...log, content: originalError }
+            : log
 
-        const segments = buildDetailSegments(log, other, t, isAdmin)
+          const segments = buildDetailSegments(displayLog, other, t, isAdmin)
         const primary = segments[0]
         const hasMore = segments.length > 1
         let primaryTextClass = 'text-foreground'
@@ -757,10 +764,10 @@ export function useCommonLogsColumns(isAdmin: boolean): ColumnDef<UsageLog>[] {
               )}
             </span>
           )
-        } else if (log.content) {
-          detailPreview = (
-            <span className='text-muted-foreground truncate group-hover:underline'>
-              {log.content}
+          } else if (displayLog.content) {
+            detailPreview = (
+              <span className='text-muted-foreground truncate group-hover:underline'>
+                {displayLog.content}
             </span>
           )
         }
@@ -775,8 +782,8 @@ export function useCommonLogsColumns(isAdmin: boolean): ColumnDef<UsageLog>[] {
             >
               {detailPreview}
             </button>
-            <DetailsDialog
-              log={log}
+              <DetailsDialog
+                log={displayLog}
               isAdmin={isAdmin}
               open={dialogOpen}
               onOpenChange={setDialogOpen}
