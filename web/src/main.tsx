@@ -37,7 +37,9 @@ import { handleServerError } from '@/lib/handle-server-error'
 
 import { DirectionProvider } from './context/direction-provider'
 import { FontProvider } from './context/font-provider'
+import { OnboardingProvider } from './context/Onboarding'
 import { ThemeProvider } from './context/theme-provider'
+import { OnboardingTargets } from './components/onboarding/OnboardingTargets'
 import './i18n/config'
 // Generated Routes
 import { routeTree } from './routeTree.gen'
@@ -163,7 +165,10 @@ if (!rootElement.innerHTML) {
         <ThemeProvider>
           <FontProvider>
             <DirectionProvider>
-              <RouterProvider router={router} />
+              <OnboardingProvider>
+                <OnboardingTargets />
+                <RouterProvider router={router} />
+              </OnboardingProvider>
             </DirectionProvider>
           </FontProvider>
         </ThemeProvider>
